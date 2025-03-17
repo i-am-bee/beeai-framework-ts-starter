@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-import { BeeAgent } from "beeai-framework/agents/bee/agent";
+import { ReActAgent } from "beeai-framework/agents/react/agent";
 import { FrameworkError } from "beeai-framework/errors";
 import * as process from "node:process";
 import { PythonTool } from "beeai-framework/tools/python/python";
@@ -18,7 +18,7 @@ if (!codeInterpreterUrl) {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const agent = new BeeAgent({
+const agent = new ReActAgent({
   llm: await ChatModel.fromName(process.env.LLM_CHAT_MODEL_NAME as any),
   memory: new UnconstrainedMemory(),
   tools: [

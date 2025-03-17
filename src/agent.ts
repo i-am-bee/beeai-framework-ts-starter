@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-import { BeeAgent } from "beeai-framework/agents/bee/agent";
+import { ReActAgent } from "beeai-framework/agents/react/agent";
 import { FrameworkError } from "beeai-framework/errors";
 import { TokenMemory } from "beeai-framework/memory/tokenMemory";
 import { OpenMeteoTool } from "beeai-framework/tools/weather/openMeteo";
@@ -7,7 +7,7 @@ import { DuckDuckGoSearchTool } from "beeai-framework/tools/search/duckDuckGoSea
 import { createConsoleReader } from "./helpers/reader.js";
 import { ChatModel } from "beeai-framework/backend/chat";
 
-const agent = new BeeAgent({
+const agent = new ReActAgent({
   llm: await ChatModel.fromName(process.env.LLM_CHAT_MODEL_NAME as any),
   memory: new TokenMemory(),
   tools: [new OpenMeteoTool(), new DuckDuckGoSearchTool()],

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { z } from "zod";
-import { BeeAgent } from "beeai-framework/agents/bee/agent";
+import { ReActAgent } from "beeai-framework/agents/react/agent";
 import { UnconstrainedMemory } from "beeai-framework/memory/unconstrainedMemory";
 import { createConsoleReader } from "./helpers/reader.js";
 import { isEmpty } from "remeda";
@@ -64,7 +64,7 @@ const workflow = new Workflow({
   })
   .addStrictStep("planner", schema.required({ topic: true }), async (state) => {
     const llm = await ChatModel.fromName(process.env.LLM_CHAT_MODEL_NAME as any);
-    const agent = new BeeAgent({
+    const agent = new ReActAgent({
       llm,
       memory: new UnconstrainedMemory(),
       tools: [new DuckDuckGoSearchTool(), new LLMTool({ llm })],
