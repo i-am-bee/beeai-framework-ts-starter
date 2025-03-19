@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@opentelemetry/sdk-node": "^0.57.0",
-    "beeai-framework": "^0.1.7",
+    "beeai-framework": "^0.1.8",
     "dotenv": "^16.4.5",
     "pino": "^9.4.0",
     "zod": "^3.24.2"
