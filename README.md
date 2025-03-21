@@ -7,7 +7,7 @@ This starter template lets you quickly start working with the [BeeAI Framework](
 ## ✨ Key Features
 
 - 🔒 Safely execute an arbitrary Python Code via [Bee Code Interpreter](https://github.com/i-am-bee/bee-code-interpreter).
-- 🔎 Get complete visibility into agents' decisions using our MLFlow integration thanks to [Bee Observe](https://github.com/i-am-bee/bee-observe).
+- 🔎 Get complete visibility into agents' decisions using our [OpenInference Instrumentation for BeeAI](https://github.com/Arize-ai/openinference/tree/main/js/packages/openinference-instrumentation-beeai) package.
 - 🚀 Fully fledged TypeScript project setup with linting and formatting.
 
 ## 📦 Requirements
@@ -33,7 +33,7 @@ To run an agent with a custom prompt, simply do this `npm run start src/agent.ts
 
 > [!TIP]
 >
-> To use Bee agent with [Bee Observe](https://github.com/i-am-bee/bee-observe) refer to the [Observability](#observability) section.
+> To use Bee agent with [OpenInference Instrumentation for BeeAI](https://github.com/Arize-ai/openinference/tree/main/js/packages/openinference-instrumentation-beeai) refer to the [Observability](#observability) section.
 
 ## 🏗 Infrastructure
 
@@ -60,17 +60,26 @@ The [Bee Code Interpreter](https://github.com/i-am-bee/bee-code-interpreter) is 
 
 ## 🔎 Observability
 
-Get complete visibility of the agent's inner workings via our observability stack.
-
-- The [MLFlow](https://mlflow.org/) is used as UI for observability.
-- The [Bee Observe](https://github.com/i-am-bee/bee-observe) is the observability service (API) for gathering traces from [Bee Agent Framework](https://github.com/i-am-bee/beeai-framework).
+Get complete visibility of the agent's inner workings via [OpenInference Instrumentation for BeeAI](https://github.com/Arize-ai/openinference/tree/main/js/packages/openinference-instrumentation-beeai).
 
 ### Instructions
 
-1. Start all services related to [Bee Observe](https://github.com/i-am-bee/bee-observe) `npm run infra:start --profile=observe`
-2. Run the agent `npm run start src/agent_observe.ts`
-3. See visualized trace in MLFlow web application [`http://127.0.0.1:8080/#/experiments/0`](http://localhost:8080/#/experiments/0)
+> Please use node version >= 20 to run this example.
 
-> [!TIP]
->
-> Configuration file is [infra/observe/.env.docker](./infra/observe/.env.docker).
+1. (Optional) In order to see spans in [Phoenix](https://github.com/Arize-ai/phoenix), begin running a Phoenix server. This can be done in one command using docker.
+
+```
+docker run -p 6006:6006 -i -t arizephoenix/phoenix
+```
+
+or via the command line:
+
+```
+brew install i-am-bee/beeai/arize-phoenix
+brew services start arize-phoenix
+```
+
+see https://docs.beeai.dev/observability/agents-traceability for more details.
+
+2. Run the agent `npm run start src/agent_observe.ts`
+3. You should see your spans exported in your console. If you've set up a locally running Phoenix server, head to [**localhost:6006**](http://localhost:6006/projects) to see your spans.

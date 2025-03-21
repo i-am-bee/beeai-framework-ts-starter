@@ -36,6 +36,7 @@
     "prepare": "husky && npm run _ensure_env"
   },
   "dependencies": {
+    "@arizeai/openinference-instrumentation-beeai": "^1.1.0",
     "@opentelemetry/sdk-node": "^0.57.0",
     "beeai-framework": "^0.1.8",
     "dotenv": "^16.4.5",
