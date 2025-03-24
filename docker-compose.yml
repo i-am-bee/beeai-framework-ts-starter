@@ -26,66 +26,6 @@ services:
       interval: 10s
       retries: 10
       start_period: 30s
-  mongo:
-    profiles:
-      - all
-      - observe
-    image: mongo:7
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
-    healthcheck:
-      test: |
-        mongosh --quiet --eval 'db.getSiblingDB("bee-observe").getCollection("span") ? quit(0) : quit(1)' || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  redis:
-    profiles:
-      - all
-      - observe
-    image: redis:7
-    command: redis-server --save 20 1 --loglevel warning
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  mlflow:
-    profiles:
-      - all
-      - observe
-    image: bitnami/mlflow:2.16.2
-    ports:
-      - "8080:8080"
-    entrypoint: ["/bin/bash", "-c", "/entrypoint.sh && mlflow server --host 0.0.0.0 --port 8080"]
-    security_opt:
-      - "label=disable"
-    volumes:
-      - ./infra/observe/entrypoint.sh:/entrypoint.sh:ro
-  observe_api:
-    profiles:
-      - all
-      - observe
-    image: icr.io/i-am-bee/bee-observe:0.0.6
-    ports:
-      - "4002:3000"
-    command: >
-      /bin/sh -c "
-        touch tsconfig.json && npx mikro-orm --config dist/mikro-orm.config.js migration:up &&
-        node ./dist/index.js
-      "
-    env_file:
-      - ./infra/observe/.env.docker
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://0.0.0.0:3000/health || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    depends_on:
-      - mlflow
-      - mongo
-      - redis
 
 volumes:
   k3s-containerd:

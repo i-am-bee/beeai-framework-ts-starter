@@ -5,7 +5,6 @@ import { FrameworkError } from "beeai-framework/errors";
 import { TokenMemory } from "beeai-framework/memory/tokenMemory";
 import { OpenMeteoTool } from "beeai-framework/tools/weather/openMeteo";
 import { WikipediaTool } from "beeai-framework/tools/search/wikipedia";
-import { createConsoleReader } from "./helpers/reader.js";
 import { ChatModel } from "beeai-framework/backend/chat";
 import process from "node:process";
 
@@ -15,22 +14,21 @@ const agent = new ReActAgent({
   tools: [new OpenMeteoTool(), new WikipediaTool()],
 });
 
-const reader = createConsoleReader({ fallback: `What is the current weather in Las Vegas?` });
-for await (const { prompt } of reader) {
-  try {
-    const response = await agent.run(
-      { prompt },
-      {
-        execution: {
-          maxIterations: 8,
-          maxRetriesPerStep: 3,
-          totalMaxRetries: 10,
-        },
-      },
-    );
+const prompt = `What is the current weather in Las Vegas?`;
 
-    reader.write(`Agent 🤖 : `, response.result.text);
-  } catch (error) {
-    reader.write(`Error`, FrameworkError.ensure(error).dump());
-  }
+try {
+  const response = await agent.run(
+    { prompt },
+    {
+      execution: {
+        maxIterations: 8,
+        maxRetriesPerStep: 3,
+        totalMaxRetries: 10,
+      },
+    },
+  );
+
+  console.log(`Agent 🤖 : `, response.result.text);
+} catch (error) {
+  console.log(`Error`, FrameworkError.ensure(error).dump());
 }

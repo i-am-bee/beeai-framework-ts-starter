@@ -18,25 +18,32 @@ import "dotenv/config";
 import "@opentelemetry/instrumentation/hook.mjs";
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 import { Version } from "beeai-framework";
-import { NodeSDK } from "@opentelemetry/sdk-node";
+import { NodeSDK, node, resources } from "@opentelemetry/sdk-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import { Resource } from "@opentelemetry/resources";
+import { BeeAIInstrumentation } from "@arizeai/openinference-instrumentation-beeai";
+import * as beeaiFramework from "beeai-framework";
 
-const traceExporter = new OTLPTraceExporter({
-  timeoutMillis: 120_000,
-});
+const beeAIInstrumentation = new BeeAIInstrumentation();
 
 const sdk = new NodeSDK({
-  resource: new Resource({
+  resource: new resources.Resource({
     [ATTR_SERVICE_NAME]: "beeai-framework-starter",
     [ATTR_SERVICE_VERSION]: Version,
   }),
-  traceExporter,
+  spanProcessors: [
+    new node.SimpleSpanProcessor(
+      new OTLPTraceExporter({
+        url: "http://127.0.0.1:6006/v1/traces",
+      }),
+    ),
+    new node.SimpleSpanProcessor(new node.ConsoleSpanExporter()),
+  ],
 });
 
 sdk.start();
 
+beeAIInstrumentation.manuallyInstrument(beeaiFramework);
+
 process.on("beforeExit", async () => {
-  await traceExporter.forceFlush();
   await sdk.shutdown();
 });
