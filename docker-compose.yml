@@ -17,7 +17,7 @@ services:
     restart: always
     volumes:
       - k3s-containerd:/var/lib/rancher/k3s/agent/containerd
-      - ${CODE_INTEPRETER_TMPDIR:-./tmp/code_interpreter_target}:/storage
+      - ${CODE_INTERPRETER_TMPDIR:-./tmp/code_interpreter_target}:/storage
       - ./infra/bee-code-interpreter.yaml:/var/lib/rancher/k3s/server/manifests/bee-code-interpreter.yaml
     ports:
       - "50081:30051"
