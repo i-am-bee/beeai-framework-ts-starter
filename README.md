@@ -62,6 +62,8 @@ The [Bee Code Interpreter](https://github.com/i-am-bee/bee-code-interpreter) is 
 
 Get complete visibility of the agent's inner workings via [OpenInference Instrumentation for BeeAI](https://github.com/Arize-ai/openinference/tree/main/js/packages/openinference-instrumentation-beeai).
 
+> Be sure the [OpenInference Instrumentation for BeeAI](https://github.com/Arize-ai/openinference/tree/main/js/packages/openinference-instrumentation-beeai) supports the newest [BeeAI framework](https://github.com/i-am-bee/beeai-framework/tree/main/typescript) before updating the framework version in this repository.
+
 ### Instructions
 
 > Please use node version >= 20 to run this example.
