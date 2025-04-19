@@ -6,9 +6,13 @@ import { OpenMeteoTool } from "beeai-framework/tools/weather/openMeteo";
 import { DuckDuckGoSearchTool } from "beeai-framework/tools/search/duckDuckGoSearch";
 import { createConsoleReader } from "./helpers/reader.js";
 import { ChatModel } from "beeai-framework/backend/chat";
+import { FullModelName } from "beeai-framework/backend/utils";
+import { ProviderName } from "beeai-framework/backend/constants";
+
+const CHAT_MODEL_NAME = process.env.LLM_CHAT_MODEL_NAME as FullModelName | ProviderName;
 
 const agent = new ReActAgent({
-  llm: await ChatModel.fromName(process.env.LLM_CHAT_MODEL_NAME as any),
+  llm: await ChatModel.fromName(CHAT_MODEL_NAME),
   memory: new TokenMemory(),
   tools: [new OpenMeteoTool(), new DuckDuckGoSearchTool()],
 });
