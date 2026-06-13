@@ -54,15 +54,14 @@ const workflow = new Workflow({
         .or(schema.pick({ topic: true, notes: true })),
     });
 
-    const result = object as { error?: string } | { topic?: string; notes?: string[] };
-    if ("error" in result && result.error) {
+    const result = object as { error?: string; topic?: string; notes?: string[] };
+    if (result.error) {
       state.output = result.error;
       return Workflow.END;
     }
 
-    const successResult = result as { topic?: string; notes?: string[] };
-    state.notes = successResult.notes ?? [];
-    state.topic = successResult.topic;
+    state.notes = result.notes ?? [];
+    state.topic = result.topic;
   })
   .addStrictStep("planner", schema.required({ topic: true }), async (state) => {
     const llm = await ChatModel.fromName(process.env.LLM_CHAT_MODEL_NAME as any);
