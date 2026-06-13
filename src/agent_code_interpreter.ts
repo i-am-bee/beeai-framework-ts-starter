@@ -32,6 +32,7 @@ const agent = new ReActAgent({
     await CustomTool.fromSourceCode(
       {
         url: codeInterpreterUrl,
+        env: {},
       },
       `import requests
 
